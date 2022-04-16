@@ -11,7 +11,6 @@ locals {
   )
 
   ### TODO: Come up with a nicer way to store these kinds of constants
-
   region_abbrs = {
     us-east-1      = "use1",  # US East (N. Virginia)
     us-east-2      = "use2",  # US East (Ohio)
