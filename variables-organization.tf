@@ -8,7 +8,7 @@ variable "account_id" {
 }
 
 variable "organization_name" {
-  type = string
+  type        = string
   description = "The name of the organization this bucket is being previsioned for"
 }
 

@@ -1,10 +1,10 @@
 resource "aws_s3_bucket" "service_bucket" {
   bucket        = local.bucket_name
-  acl           = "private"
   force_destroy = var.force_destroy
-  tags = merge(map(
-    "Name", local.bucket_name,
-    "log_target", var.access_log_bucket),
+  tags = merge({
+    name       = local.bucket_name,
+    log_target = var.access_log_bucket
+    },
   local.resource_tags)
 
   lifecycle {
@@ -13,25 +13,8 @@ resource "aws_s3_bucket" "service_bucket" {
     ]
   }
 
-  versioning {
-    enabled = true
-  }
-
-  logging {
-    target_bucket = var.access_log_bucket
-    target_prefix = var.access_log_prefix
-  }
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = local.kms_key_arn
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
-
   dynamic "lifecycle_rule" {
-    for_each = var.lifecycle_rule
+    for_each = var.lifecycle_rules
 
     content {
       id                                     = lookup(lifecycle_rule.value, "id", null)
@@ -82,4 +65,35 @@ resource "aws_s3_bucket" "service_bucket" {
       }
     }
   }
+
+}
+
+resource "aws_s3_bucket_acl" "service_bucket_acl" {
+  bucket = aws_s3_bucket.service_bucket.bucket
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_versioning" "service_bucket_versioning" {
+  bucket = aws_s3_bucket.service_bucket.bucket
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "service_bucket_encryption_configuration" {
+  bucket = aws_s3_bucket.service_bucket.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = local.kms_key_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_logging" "service_bucket_logging" {
+  bucket = aws_s3_bucket.service_bucket.bucket
+
+  target_bucket = var.access_log_bucket
+  target_prefix = var.access_log_prefix
 }

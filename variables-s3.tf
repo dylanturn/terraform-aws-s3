@@ -53,7 +53,7 @@ variable "access_log_retention_days" {
   default     = 403
 }
 
-variable "lifecycle_rule" {
+variable "lifecycle_rules" {
   type        = any
   description = "List of maps containing configuration of object lifecycle management"
   default     = []
