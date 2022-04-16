@@ -1,6 +1,6 @@
 
 locals {
-  bucket_name = "${var.organization_name}-${var.environment}-${var.service_name}-${var.service_function}.${lookup(local.region_abbrs, var.region, null)}"
+  bucket_name = lower("${var.organization_name}-${var.environment}-${var.service_name}-${var.service_function}.${lookup(local.region_abbrs, var.region, null)}")
   resource_tags = merge(
     {
       service          = var.service_name,
