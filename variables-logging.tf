@@ -5,6 +5,7 @@
 variable "access_log_prefix" {
   type        = string
   description = "The prefix access logs for this bucket will be stored under"
+  default     = null
 }
 variable "access_log_bucket" {
   type        = string
