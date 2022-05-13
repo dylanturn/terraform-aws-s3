@@ -40,7 +40,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "service_bucket_en
 resource "aws_s3_bucket_logging" "service_bucket_logging" {
   count = var.access_log_bucket == null ? 0 : 1
 
-  bucket                = aws_s3_bucket.service_bucket.bucket
+  bucket                = aws_s3_bucket.service_bucket.id
   expected_bucket_owner = var.account_id
 
   target_bucket = var.access_log_bucket
