@@ -41,7 +41,6 @@ resource "aws_s3_bucket_logging" "service_bucket_logging" {
   count = var.access_log_bucket == null ? 0 : 1
 
   bucket                = aws_s3_bucket.service_bucket.id
-  expected_bucket_owner = var.account_id
 
   target_bucket = var.access_log_bucket
   target_prefix = var.access_log_prefix == null ? "s3/" : "s3/${var.access_log_prefix}/"
